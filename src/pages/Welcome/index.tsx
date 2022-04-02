@@ -106,6 +106,49 @@ const Welcome = ({ setNewUser }: any) => {
         </Container>
       ),
     },
+    2: {
+      content: (
+        <Container>
+          <>
+            <Logo width={200} height={215} />
+          </>
+          <FormContainer>
+            <StyledTitle style={{ fontSize: 24 }}>Crie sua conta</StyledTitle>
+            <StyledTextInput
+              placeholder={"Nome"}
+              onChangeText={(text) => setValue("nome", text)}
+            />
+            <StyledTextInput
+              placeholder={"Cpf"}
+              onChangeText={(text) => setValue("cpf", text)}
+            />
+            <StyledTextInput
+              placeholder={"Email"}
+              onChangeText={(text) => setValue("email", text)}
+            />
+            <StyledTextInput
+              placeholder={"Senha"}
+              onChangeText={(text) => setValue("password", text)}
+            />
+            <NextButton style={{ marginTop: 10 }} onTouchEnd={handleSubmit(submit)}>
+              <StyledButtonText>Cadastrar</StyledButtonText>
+            </NextButton>
+          </FormContainer>
+          <>
+            <ChangePageContainer onTouchEnd={() => handleNextStep(0)}>
+              <MaterialCommunityIcons
+                name="arrow-collapse-right"
+                size={20}
+                color="#D98D00"
+              />
+              <StyledText style={{ color: "#D98D00", marginLeft: 20 }}>
+                Voltar para o login
+              </StyledText>
+            </ChangePageContainer>
+          </>
+        </Container>
+      ),
+    },
   };
 
   return <Container>{steps[step].content}</Container>;
