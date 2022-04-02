@@ -3,12 +3,12 @@ import { Platform } from "react-native";
 import { StatusBar } from "expo-status-bar";
 import { MenuProvider } from "react-native-popup-menu";
 import {
-  Jost_400Regular,
-  Jost_500Medium,
-  Jost_600SemiBold,
-  Jost_700Bold,
   useFonts,
-} from "@expo-google-fonts/jost";
+  Arsenal_400Regular,
+  Arsenal_400Regular_Italic,
+  Arsenal_700Bold_Italic,
+  Arsenal_700Bold,
+} from "@expo-google-fonts/arsenal";
 import Routes from "./src/routes";
 import Splash from "./src/pages/Splash";
 import Welcome from "./src/pages/Welcome";
@@ -24,10 +24,10 @@ export default function App() {
   const [newUser, setNewUser] = useState(true);
 
   let [fontsLoaded] = useFonts({
-    jost_400: Jost_400Regular,
-    jost_500: Jost_500Medium,
-    jost_600: Jost_600SemiBold,
-    jost_700: Jost_700Bold,
+    jost_400: Arsenal_400Regular,
+    jost_500: Arsenal_400Regular_Italic,
+    jost_600: Arsenal_700Bold_Italic,
+    jost_700: Arsenal_700Bold,
   });
 
   if (!fontsLoaded) {
