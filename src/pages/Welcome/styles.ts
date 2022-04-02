@@ -2,19 +2,20 @@ import styled from "styled-components/native";
 import colors from "../../styles/colors";
 
 export const Container = styled.View`
-  display: flex;
-  align-items: center;
-  padding: 60px 40px;
-  background: ${colors.primary};
   height: 100%;
+  width: 100%;
+  align-items: center;
+  padding: 10% 10%;
+  background: ${colors.primary};
   justify-content: space-between;
 `;
 
 export const StyledTitle = styled.Text`
-  font-family: "jost_600";
+  font-family: "jost_500";
   font-size: 32px;
   color: ${colors.white};
   text-align: center;
+  margin-bottom: 16px;
 `;
 
 export const StyledText = styled.Text`
@@ -25,33 +26,41 @@ export const StyledText = styled.Text`
 `;
 
 export const NextButton = styled.View`
+  width: 295px;
   border-radius: 16px;
-  padding: 16px;
-  background: ${colors.pink};
+  padding: 12px;
+  background: ${colors.natural};
   color: ${colors.black};
 `;
 
 export const StyledButtonText = styled.Text`
   font-family: "jost_500";
   font-size: 17px;
-  color: ${colors.white};
+  color: ${colors.grey};
   text-align: center;
   margin: 0px 50px;
 `;
 
 export const FormContainer = styled.View`
-  height: 380px;
-  width: 100%;
-  border-radius: 8px;
-  display: flex;
+  width: 295px;
+  margin-top: 30px;
+  margin-bottom: 16px;
   justify-content: space-between;
 `;
 
 export const StyledTextInput = styled.TextInput.attrs({
-  placeholderTextColor: colors.pink,
+  placeholderTextColor: colors.grey,
 })`
   width: 100%;
   background: ${colors.white};
   padding: 10px 20px;
-  border-radius: 24px;
+  border-radius: 10px;
+  margin-bottom: 8px;
+`;
+
+export const ChangePageContainer = styled.View`
+  align-items: center;
+  justify-content: space-between;
+  flex-direction: row;
+  margin-top: 40px;
 `;

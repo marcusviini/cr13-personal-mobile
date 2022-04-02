@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from "react";
-import { MaterialIcons } from "@expo/vector-icons";
+import { View } from "react-native";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
+import { Ionicons } from "@expo/vector-icons";
 import { useForm } from "react-hook-form";
-import { CalculatorVector } from "../../static/CalculatorVector";
+import { Logo } from "../../static/Logo";
 
 import {
   Container,
@@ -10,15 +12,16 @@ import {
   StyledButtonText,
   NextButton,
   StyledTextInput,
-  FormContainer
+  FormContainer,
+  ChangePageContainer,
 } from "./styles";
 
 const Welcome = ({ setNewUser }: any) => {
   const [step, setStep] = useState<number>(0);
   const { register, setValue, handleSubmit } = useForm();
 
-  const handleNextStep = () => {
-    setStep(step + 1);
+  const handleNextStep = (step: number) => {
+    setStep(step);
   };
 
   const submit = (data: any) => {
@@ -27,81 +30,85 @@ const Welcome = ({ setNewUser }: any) => {
   };
 
   useEffect(() => {
-    register("name");
-    register("lastname");
-    register("currency");
-    register("initialBalancy");
-    register("financialProfile");
-    register("financialObjective");
+    register("mail");
+    register("password");
   }, [register]);
+
+  //<Ionicons name="mail-outline" size={24} color="red" />
 
   const steps: Record<number, any> = {
     0: {
-      title: <StyledTitle>Gerencie suas finanças de forma fácil</StyledTitle>,
       content: (
-        <>
-          <CalculatorVector />
-          <StyledText>
-            Não esqueça mais de pagar suas dívidas. Nós cuidamos de lembrar você
-            sempre que precisar.
-          </StyledText>
-        </>
-      ),
-      button: (
-        <NextButton onTouchEnd={handleNextStep}>
-          <MaterialIcons name="keyboard-arrow-right" size={24} color="white" />
-        </NextButton>
+        <Container>
+          <Logo width={200} height={215} />
+          <FormContainer>
+            <StyledTitle style={{ fontSize: 24 }}>Faça seu login</StyledTitle>
+            <StyledTextInput
+              placeholder={"Email"}
+              onChangeText={(text) => setValue("email", text)}
+            ></StyledTextInput>
+            <StyledTextInput
+              placeholder={"Senha"}
+              onChangeText={(text) => setValue("password", text)}
+            />
+          </FormContainer>
+          <NextButton onTouchEnd={handleSubmit(submit)}>
+            <StyledButtonText>Entrar</StyledButtonText>
+          </NextButton>
+          <View onTouchEnd={() => handleNextStep(1)}>
+            <StyledText style={{ marginTop: 18, marginBottom: 18 }}>
+              Esqueci minha senha
+            </StyledText>
+          </View>
+          <ChangePageContainer onTouchEnd={() => handleNextStep(2)}>
+            <MaterialCommunityIcons
+              name="arrow-collapse-right"
+              size={20}
+              color="#D98D00"
+            />
+            <StyledText style={{ color: "#D98D00", marginLeft: 20 }}>
+              Criar uma conta
+            </StyledText>
+          </ChangePageContainer>
+        </Container>
       ),
     },
     1: {
-      title: (
-        <StyledTitle style={{ fontSize: 24 }}>
-          Para começar precisamos de algumas informações básicas
-        </StyledTitle>
-      ),
       content: (
-        <FormContainer>
-          <StyledTextInput
-            placeholder={"Nome"}
-            onChangeText={(text) => setValue("name", text)}
-          />
-          <StyledTextInput
-            placeholder={"Sobrenome"}
-            onChangeText={(text) => setValue("lastname", text)}
-          />
-          <StyledTextInput
-            placeholder={"Moeda"}
-            onChangeText={(text) => setValue("currency", text)}
-          />
-          <StyledTextInput
-            placeholder={"Saldo incial"}
-            onChangeText={(text) => setValue("initialBalancy", text)}
-          />
-          <StyledTextInput
-            placeholder={"Perfil financeiro"}
-            onChangeText={(text) => setValue("financialProfile", text)}
-          />
-          <StyledTextInput
-            placeholder={"Objetivo financeiro"}
-            onChangeText={(text) => setValue("financialObjective", text)}
-          />
-        </FormContainer>
-      ),
-      button: (
-        <NextButton onTouchEnd={handleSubmit(submit)}>
-          <StyledButtonText>CONFIRMAR</StyledButtonText>
-        </NextButton>
+        <Container>
+          <>
+            <Logo width={200} height={215} />
+          </>
+
+          <FormContainer>
+            <StyledTitle style={{ fontSize: 24 }}>Crie sua conta</StyledTitle>
+            <StyledTextInput
+              placeholder={"Email"}
+              onChangeText={(text) => setValue("email", text)}
+            />
+            <NextButton style={{ marginTop: 10 }} onTouchEnd={handleSubmit(submit)}>
+              <StyledButtonText>Solicitar email para alteração de senha</StyledButtonText>
+            </NextButton>
+          </FormContainer>
+          
+          <>
+          <ChangePageContainer onTouchEnd={() => handleNextStep(0)}>
+              <MaterialCommunityIcons
+                name="arrow-collapse-right"
+                size={20}
+                color="#D98D00"
+              />
+              <StyledText style={{ color: "#D98D00", marginLeft: 20 }}>
+                Voltar para o login
+              </StyledText>
+            </ChangePageContainer>
+          </>
+        </Container>
       ),
     },
   };
 
-  return (
-    <Container>
-      {steps[step].title}
-      {steps[step].content}
-      {steps[step].button}
-    </Container>
-  );
+  return <Container>{steps[step].content}</Container>;
 };
 
 export default Welcome;
