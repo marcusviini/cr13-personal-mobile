@@ -1,114 +1,76 @@
-import React from "react";
-import { Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
-import colors from "../../styles/colors";
-import MainCard from "../../components/MainCard";
-import Balance from "../../components/Balance";
-import TransactionItem from "../../components/TransactionItem";
-import { NoItemText } from "./styles";
-import Page from "../../components/Page";
-import { Transaction } from "../../core/entities/transaction.entity";
+import React, { useEffect, useState } from "react";
+import { View,Text } from "react-native";
 
-const mok: Transaction[] = [
-  {
-    title: "Luz",
-    date: new Date("2021-03-09"),
-    receive: false,
-    value: 90.47,
-    concluded: true,
-  },
-  {
-    title: "Salário",
-    date: new Date("2021-03-07"),
-    receive: true,
-    value: 3000,
-    concluded: true,
-  },
-  {
-    title: "Água",
-    date: new Date("2021-03-05"),
-    receive: false,
-    value: 50.53,
-    concluded: true,
-  },
-  {
-    title: "Freela",
-    date: new Date("2022-03-30"),
-    receive: true,
-    value: 500,
-    concluded: false,
-  },
-];
+import MainCard from "../../components/MainCard";
+import ReactDataSheet from 'react-datasheet';
+import { api } from '../../service/api'
+
+import { Container,TreinosContainer,TreinoContainer,TreinoDescription } from "./styles";
+
 
 const Dashboard = () => {
-  const monthTransactions: Transaction[] = [];
-  const pendingTransactions: Transaction[] = [];
+  const [loading, setLoading] = useState(true);
+  const [treinos, setTreinos] = useState<any>([])
+  const [closeTreinos, setCloseTreinos] = useState(false)
+  const [treino, setTreino] = useState<any>();
 
-  mok.map((item) => {
-    item.concluded
-      ? monthTransactions.push(item)
-      : pendingTransactions.push(item);
-  });
+  const handleOpenTraining  = async(data: any) => {
+    setTreino(data)
+    setCloseTreinos(true)
+  }
+
+  useEffect(() => {
+    async function getTreinos() {
+      setLoading(true);
+      try {
+        const response = await api.get('/training')
+        setTreinos(response.data.treinos)
+        setLoading(false)
+        setCloseTreinos(false)
+      } catch (error:any) {
+        console.error(error.message);
+      }   
+    }
+    getTreinos()
+  }, [])
+
 
   return (
-    <Page>
-      <MainCard
-        title="Saldo"
-        icon={
-          <Ionicons name="wallet-outline" size={20} color={colors.darkGray} />
-        }
-      >
-        <Balance />
-      </MainCard>
-      <MainCard
-        title="Transações do mês"
-        collapse
-        icon={
-          <Ionicons name="swap-vertical" size={20} color={colors.darkGray} />
-        }
-      >
-        {monthTransactions.length ? (
-          monthTransactions.map((item, i) => (
-            <TransactionItem
-              key={i}
-              title={item.title}
-              date={item.date}
-              receive={item.receive}
-              value={item.value}
-              concluded={item.concluded}
-            />
-          ))
-        ) : (
-          <NoItemText>Não há transações!</NoItemText>
-        )}
-      </MainCard>
-      <MainCard
-        title="Transações pendentes"
-        subTitle="Próximos 30 dias"
-        collapse
-        icon={
-          <MaterialCommunityIcons
-            name="timer-sand"
-            size={20}
-            color={colors.darkGray}
-          />
-        }
-      >
-        {pendingTransactions.length ? (
-          pendingTransactions.map((item, i) => (
-            <TransactionItem
-              key={i}
-              title={item.title}
-              date={item.date}
-              receive={item.receive}
-              value={item.value}
-              concluded={item.concluded}
-            />
-          ))
-        ) : (
-          <NoItemText>Não há transações!</NoItemText>
-        )}
-      </MainCard>
-    </Page>
+    <Container>
+      <MainCard/>
+          {loading && (
+            <Text>Carregando treinos</Text>
+          )}
+           <TreinosContainer>
+            {!loading && !closeTreinos  && (                
+                treinos.map((treino:any) => (                  
+                    <TreinoContainer key={treino.description} onTouchEnd={()=>handleOpenTraining(treino)}>
+                      <TreinoDescription>{treino.description}</TreinoDescription>
+                      <TreinoDescription>{treino.resume}</TreinoDescription>
+                      </TreinoContainer>
+                  )
+                )
+            )}
+           </TreinosContainer>
+           {closeTreinos && (
+              <Text>
+               {treino.description}
+               {treino.resume}
+               { treino.steps.map((steps:any) => (  
+                    <View key={Math.random()} onTouchEnd={() => setCloseTreinos(false)}>             
+                      <Text>{steps.description}</Text>
+                      <Text>{steps.title}</Text>
+                      <Text>{steps.intervalo}</Text>                     
+                      <Text>{steps.repeticoes}</Text>
+                      <Text>{steps.series}</Text>
+                      <Text>{steps.linkVideo}</Text>
+                    </View>   
+                  )
+                )
+              }
+              </Text>
+           )}
+    </Container>
   );
 };
 

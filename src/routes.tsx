@@ -7,6 +7,8 @@ import {
   Ionicons,
   MaterialCommunityIcons,
 } from "@expo/vector-icons";
+
+
 import colors from "./styles/colors";
 import Dashboard from "./pages/Dashboard";
 import Transactions from "./pages/Transactions";
@@ -40,7 +42,7 @@ const Routes: React.FC = () => (
       }}
     >
       <Screen
-        name="Dashboard"
+        name="Meus Treinos"
         options={{
           tabBarIcon: ({ size, focused }) => {
             return (
@@ -55,7 +57,7 @@ const Routes: React.FC = () => (
         component={Dashboard}
       />
       <Screen
-        name="Transações"
+        name="Meu personal"
         options={{
           tabBarIcon: ({ size, focused }) => {
             return (
@@ -70,12 +72,12 @@ const Routes: React.FC = () => (
         component={Transactions}
       />
       <Screen
-        name="Financeiro"
+        name="Meu perfil"
         options={{
           tabBarIcon: ({ size, focused }) => {
             return (
               <FontAwesome5
-                name="chart-bar"
+                name="user"
                 size={size}
                 color={focused ? colors.primary : colors.darkGray}
               />

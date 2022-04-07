@@ -2,12 +2,7 @@ import styled from "styled-components/native";
 import colors from "../../styles/colors";
 
 export const Container = styled.View`
-  background-color: white;
   width: 100%;
-  min-height: 54px;
-  border-radius: 28px;
-  margin-top: 16px;
-  padding: 10px 25px;
 `;
 
 export const StyledTitle = styled.Text`
@@ -25,15 +20,21 @@ export const StyledSubTitle = styled.Text`
 `;
 
 export const HeaderContainer = styled.View`
+  margin-top: 30px;
   width: 100%;
-  height: 34px;
+  height: 80px;
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
 `;
 
 export const TitleContainer = styled.View`
-  flex-direction: row;
-  align-items: center;
+  flex-direction: column;
+  flex:1;
+  margin-top: 52px;
+  margin-left:24px ;
+  margin-right:100px;
+  height:114px;
+  width:54px;
 `;
 

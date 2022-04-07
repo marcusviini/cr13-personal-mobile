@@ -1,7 +1,6 @@
-import React, { ReactNode, useState } from "react";
-import { View } from "react-native";
-import { MaterialIcons } from "@expo/vector-icons";
-import colors from "../../styles/colors";
+import React, { useEffect, useState } from "react";
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { Avatar } from 'react-native-paper';
 
 import {
   Container,
@@ -11,50 +10,27 @@ import {
   StyledTitle,
 } from "./styles";
 
-interface MainCardProps {
-  title: string;
-  subTitle?: string;
-  icon: ReactNode;
-  children?: ReactNode;
-  collapse?: boolean;
-}
+const MainCard: React.FC = () => {
+  const [data, dataSet] = useState<any>(null)
 
-const MainCard = ({
-  title,
-  subTitle,
-  icon,
-  children,
-  collapse,
-}: MainCardProps) => {
-  const [open, setOpen] = useState(false);
+  useEffect(() => {
+    async function getUserName() {
+      const user:any = await AsyncStorage.getItem('@cr13Personal:user')
+      await dataSet(JSON.parse(user))
+    }
 
-  const handleCollapse = () => {
-    setOpen(!open);
-  };
+    getUserName()
+  }, [])
 
   return (
     <Container>
       <HeaderContainer>
         <TitleContainer>
-          {icon}
-          <View>
-            <StyledTitle>{title}</StyledTitle>
-            {subTitle && <StyledSubTitle>{subTitle}</StyledSubTitle>}
-          </View>
+        <StyledTitle style={{ fontSize: 20 ,color:"#E6E6E6"}}>Bem vindo,</StyledTitle>
+        <StyledSubTitle style={{ fontSize: 20, color:"#FF9000" }}>{data?.nome || ''}</StyledSubTitle>
         </TitleContainer>
-        {collapse && (
-          <View onTouchEnd={handleCollapse}>
-            <MaterialIcons
-              name={open ? "keyboard-arrow-up" : "keyboard-arrow-down"}
-              size={24}
-              color={colors.darkGray}
-            />
-          </View>
-        )}
+        <Avatar.Image size={90} source={require('../../../assets/avatar/muzy.png')}/>
       </HeaderContainer>
-      {(!collapse || open) && (
-        <View style={subTitle ? { marginTop: 8 } : undefined}>{children}</View>
-      )}
     </Container>
   );
 };

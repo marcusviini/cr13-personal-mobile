@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 import { Platform } from "react-native";
-import { StatusBar } from "expo-status-bar";
-import { MenuProvider } from "react-native-popup-menu";
+import { MenuProvider } from 'react-native-popup-menu';
+import { Provider } from "react-redux";
+import store from './src/store'
 import {
   useFonts,
   Arsenal_400Regular,
@@ -12,7 +13,9 @@ import {
 import Routes from "./src/routes";
 import Splash from "./src/pages/Splash";
 import Welcome from "./src/pages/Welcome";
+import Toast from "./src/components/Toast";
 import "react-native-gesture-handler";
+
 
 if (Platform.OS === "android") {
   require("intl");
@@ -20,35 +23,42 @@ if (Platform.OS === "android") {
 }
 
 export default function App() {
-  // TODO: save in database
-  const [newUser, setNewUser] = useState(true);
+  const [newUser, setNewUser] = useState(false);
+  const [isLoad, setIsLoad] = useState(true);
 
-  let [fontsLoaded] = useFonts({
+  useFonts({
     jost_400: Arsenal_400Regular,
     jost_500: Arsenal_400Regular_Italic,
     jost_600: Arsenal_700Bold_Italic,
     jost_700: Arsenal_700Bold,
   });
 
-  if (!fontsLoaded) {
-    return <Splash/>;
+  if(isLoad){
+    setTimeout(() => {
+      setIsLoad(false);
+    }, 2500);
+    return <Splash/>
   }
-
+    
   if (newUser) {
     return (
       <>
-        <Welcome setNewUser={setNewUser} />
-        <StatusBar style="light" />
+        <Provider store={store}>
+          <Toast/>
+          <Welcome setNewUser={setNewUser} />
+        </Provider>
       </>
     );
   }
 
   return (
     <>
-      <MenuProvider>
-        <Routes />
-      </MenuProvider>
-      <StatusBar style="light" />
+      <Provider store={store}>
+        <MenuProvider>
+          <Toast/>
+          <Routes />
+        </MenuProvider>
+      </Provider>
     </>
   );
 }
