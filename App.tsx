@@ -23,7 +23,7 @@ if (Platform.OS === "android") {
 }
 
 export default function App() {
-  const [newUser, setNewUser] = useState(false);
+  const [newUser, setNewUser] = useState(true);
   const [isLoad, setIsLoad] = useState(true);
 
   useFonts({

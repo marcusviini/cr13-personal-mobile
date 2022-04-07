@@ -10,5 +10,6 @@ export default {
   red: '#ff6c63',
   grey: '#666360',
   white: '#ffffff',
-  natural:'#009245'
+  natural:'#009245',
+  secondary:'#3E3B47'
 };

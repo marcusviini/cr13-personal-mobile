@@ -3,6 +3,8 @@ import colors from "../../styles/colors";
 
 export const Container = styled.View`
   width: 100%;
+  padding: 20px;
+  background-color: #28262e;
 `;
 
 export const StyledTitle = styled.Text`
@@ -30,11 +32,10 @@ export const HeaderContainer = styled.View`
 
 export const TitleContainer = styled.View`
   flex-direction: column;
-  flex:1;
+  flex: 1;
   margin-top: 52px;
-  margin-left:24px ;
-  margin-right:100px;
-  height:114px;
-  width:54px;
+  margin-left: 24px;
+  margin-right: 100px;
+  height: 114px;
+  width: 54px;
 `;
-
