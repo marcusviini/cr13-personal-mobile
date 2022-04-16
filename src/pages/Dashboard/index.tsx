@@ -1,18 +1,25 @@
 import React, { useEffect, useState } from "react";
-import { View, Text, ScrollView } from "react-native";
-import { List, ListItem } from "react-native-elements";
+import { View, Text, Animated } from "react-native";
+
+import LottieView from "lottie-react-native"
 
 import MainCard from "../../components/MainCard";
 import { api } from "../../service/api";
 
 import {
   Container,
+  LoadingContainer,
   TreinosContainer,
   TreinoContainer,
   TreinoDescription,
+  TreinoResume,
 } from "./styles";
 
+const ITEM_SIZE = 100
+
 const Dashboard = () => {
+  const scrollY = React.useRef(new Animated.Value(0)).current
+
   const [loading, setLoading] = useState(true);
   const [treinos, setTreinos] = useState<any>([]);
   const [closeTreinos, setCloseTreinos] = useState(false);
@@ -27,10 +34,10 @@ const Dashboard = () => {
     async function getTreinos() {
       setLoading(true);
       try {
-        const response = await api.get("/training");
-        setTreinos(response.data.treinos);
-        setLoading(false);
-        setCloseTreinos(false);
+       const response = await api.get("/training");
+       setTreinos(response.data.treinos);
+       setLoading(false);
+       setCloseTreinos(false);
       } catch (error: any) {
         console.error(error.message);
       }
@@ -41,18 +48,67 @@ const Dashboard = () => {
   return (
     <Container>
       <MainCard />
-      {loading && <Text>Carregando treinos</Text>}
-      <ScrollView showsVerticalScrollIndicator={false}>
-        <TreinosContainer>
-          {!loading &&
-            treinos.map((treino: any) => (
-              <TreinoContainer key={treino.description}>
-                <TreinoDescription>{treino.description}</TreinoDescription>
-                <TreinoDescription>{treino.resume}</TreinoDescription>
-              </TreinoContainer>
-            ))}
+     
+
+      {loading && 
+        <LoadingContainer>
+          <LottieView
+            source={require('../../../assets/loading.json')}
+            autoPlay={true}
+            loop={true}
+          />
+        </LoadingContainer>
+      }
+
+      {!loading &&
+      <TreinosContainer>
+        <Animated.FlatList 
+          showsVerticalScrollIndicator={false}
+          data={treinos}
+          onScroll={Animated.event(
+            [{nativeEvent: {contentOffset: {y:scrollY}}}],
+            {useNativeDriver:true}
+          )}
+          keyExtractor={treino =>treino.description}
+          contentContainerStyle={{
+            paddingTop:50,
+          }}
+          renderItem={({item,index}) => {
+            const inputRange =[
+              -1,
+              0,
+              ITEM_SIZE * index,
+              ITEM_SIZE * (index + 2),
+            ]
+
+            const opacityInputRange =[
+              -1,
+              0,
+              ITEM_SIZE * index,
+              ITEM_SIZE * (index + 0.5),
+            ]
+
+            const scale = scrollY.interpolate({
+              inputRange,
+              outputRange:[1, 1, 1, 0]
+            })
+
+            const opacity = scrollY.interpolate({
+              inputRange:opacityInputRange,
+              outputRange:[1, 1, 1, 0]
+            })
+
+            return <TreinoContainer style={{
+              opacity,
+              transform:[{scale}],
+            }}>
+              <TreinoDescription>{item.description}</TreinoDescription>
+              <TreinoResume>{item.resume}</TreinoResume>
+          </TreinoContainer>
+          }}
+        />
         </TreinosContainer>
-      </ScrollView>
+      }
       {closeTreinos && (
         <Text>
           {treino.description}

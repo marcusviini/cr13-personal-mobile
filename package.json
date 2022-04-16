@@ -22,6 +22,7 @@
     "fs": "^0.0.1-security",
     "immer": "^9.0.12",
     "intl": "^1.2.5",
+    "lottie-react-native": "^5.0.1",
     "path": "^0.12.7",
     "react": "17.0.1",
     "react-datasheet": "^1.4.9",
